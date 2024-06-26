@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "Server Response";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    
+    <div class="alert alert-info">
+        <p>@ViewBag.ServerResponse</p>
+    </div>
+    <br />
+    <div class="form-group">
+        <a href="@Url.Action("Upload", "Worker")" class="btn btn-primary">Back to Upload</a>
+    </div>
+</div>
