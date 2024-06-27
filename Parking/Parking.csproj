@@ -10,6 +10,7 @@
     <PackageReference Include="bootstrap" Version="5.3.3" />
     <PackageReference Include="Bootstrap.Less" Version="3.4.1" />
     <PackageReference Include="BootstrapBlazor" Version="8.6.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.31" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.TagHelpers" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.31" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.31">

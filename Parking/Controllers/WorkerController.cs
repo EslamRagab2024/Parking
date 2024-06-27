@@ -1,9 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Parking.Models;
+using System.ComponentModel;
 
 namespace Parking.Controllers
 {
     public class WorkerController : Controller
     {
+        private MyDb db;
+        public WorkerController( MyDb db )
+        {
+            this.db = db;
+        }
         [HttpGet]
         public IActionResult Index()
         {
@@ -13,13 +21,12 @@ namespace Parking.Controllers
         [HttpPost]
         public async Task<IActionResult> Upload(IFormFile photo)
         {
-            // send image to server http://127.0.0.1:5000 and response like this ٨ ٤ ٣ ٢ م س ط
-
             if (photo == null || photo.Length == 0)
             {
                 ModelState.AddModelError("PhotoError", "Photo is required.");
                 return View();
             }
+
             using (var httpClient = new HttpClient())
             {
                 using (var content = new MultipartFormDataContent())
@@ -36,10 +43,16 @@ namespace Parking.Controllers
                         if (response.IsSuccessStatusCode)
                         {
                             var result = await response.Content.ReadAsStringAsync();
-                            // Process the response (e.g., save the result to ViewData, TempData, etc.)
-                            //ViewData["ServerResponse"] = result;
-                            TempData["ServerResponse"] = result;
-                            return RedirectToAction("DisplayResult");
+
+                            // Decode Unicode escape sequences
+                            var decodedResult = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, List<string>>>(result);
+                            String ?license = decodedResult?["detected_licenses"][0];
+                            // check license in Db
+
+                            var resultUser = db.Users?.FirstOrDefault(x => x.license == license);
+                            if (resultUser != null) { int x = 5; }
+
+                            return RedirectToAction("DisplayResult",resultUser?.ID);
                         }
                         else
                         {
@@ -49,24 +62,26 @@ namespace Parking.Controllers
                 }
             }
 
-            return RedirectToAction("DisplayResult");
-
-
+            return View();
         }
 
 
-        public IActionResult DisplayResult()
+        public IActionResult DisplayResult(int id)
         {
-            if (TempData.ContainsKey("ServerResponse"))
+            var resultUser = db.Users?
+            .Include(u => u.Bookings).FirstOrDefault(x => x.ID == id);
+
+            if (resultUser != null)
             {
-                ViewBag.ServerResponse = TempData["ServerResponse"]?.ToString();
+                return View(resultUser);
             }
             else
             {
-                ViewBag.ServerResponse = "No response from the server.";
+                ModelState.AddModelError("wrong detection", "this user not booking");
+                return View();
             }
             
-            return View();
+            
         }
 
     }

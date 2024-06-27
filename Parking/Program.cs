@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Parking.Models;
 
@@ -14,6 +15,10 @@ builder.Services.AddCors(options =>
                       });
 });
 builder.Services.AddRazorPages();
+//builder.Services.AddIdentity<IdentityUser, IdentityRole>
+//    (options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<MyDb>()
+//    .AddDefaultTokenProviders();
+
 builder.Services.AddDbContext<MyDb>(options =>
 {
     options.UseSqlServer("Data Source =.; Initial Catalog = parkingdbcore; Integrated Security = True");

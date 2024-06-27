@@ -5,7 +5,7 @@ namespace Parking.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly MyDb _context;
+        private  MyDb _context;
 
         public AccountController(MyDb context)
         {
@@ -27,7 +27,7 @@ namespace Parking.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.Users.Add(user);
+                _context?.Users.Add(user);
                 _context.SaveChanges();
 
                 return RedirectToAction("login");
