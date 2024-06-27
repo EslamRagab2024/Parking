@@ -5,7 +5,14 @@ namespace Parking.Controllers
 {
     public class AccountController : Controller
     {
-        
+        private readonly MyDb _context;
+
+        public AccountController(MyDb context)
+        {
+            _context = context;
+        }
+
+
         [HttpGet]
         public IActionResult Register()
         {
@@ -17,8 +24,16 @@ namespace Parking.Controllers
         [HttpPost]
         public IActionResult Register(User user)
         {
-            
-            return View();
+
+            if (ModelState.IsValid)
+            {
+                _context.Users.Add(user);
+                _context.SaveChanges();
+
+                return RedirectToAction("login");
+            }
+
+            return View(user);
         }
 
 
@@ -32,9 +47,23 @@ namespace Parking.Controllers
 
 
         [HttpPost]
-        public IActionResult Login( [FromBody]String Email ,[FromBody]String password)
+        [ValidateAntiForgeryToken]
+        public IActionResult Login(LoginViewModel model)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                var user = _context.Users
+                    .SingleOrDefault(u => u.Email == model.Email && u.Password == model.Password);
+                if (user != null)
+                {
+                    // Login success logic
+                    return RedirectToAction("Index", "Home");
+                }
+
+                ModelState.AddModelError("", "Invalid login attempt.");
+            }
+
+            return View(model);
         }
 
     }
