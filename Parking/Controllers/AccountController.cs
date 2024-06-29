@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Parking.Models;
 
 namespace Parking.Controllers
@@ -13,7 +14,7 @@ namespace Parking.Controllers
         }
 
 
-        [HttpGet]
+        
         public IActionResult Register()
         {
             return View();
@@ -30,7 +31,7 @@ namespace Parking.Controllers
                 _context?.Users.Add(user);
                 _context.SaveChanges();
 
-                return RedirectToAction("login");
+                return RedirectToAction("Login");
             }
 
             return View(user);
@@ -38,7 +39,7 @@ namespace Parking.Controllers
 
 
 
-        [HttpGet]
+        
         public IActionResult Login()
         {
             return View();
@@ -47,24 +48,23 @@ namespace Parking.Controllers
 
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Login(LoginViewModel model)
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if (ModelState.IsValid)
+            var user = await _context.Users.SingleOrDefaultAsync
+                (u =>u.Email==model.Email&&u.Password==model.Password);
+            if (user != null)
             {
-                var user = _context.Users
-                    .SingleOrDefault(u => u.Email == model.Email && u.Password == model.Password);
-                if (user != null)
-                {
-                    // Login success logic
-                    return RedirectToAction("Index", "Home");
-                }
-
-                ModelState.AddModelError("", "Invalid login attempt.");
+                return RedirectToAction("Book", "Booking");
             }
-
-            return View(model);
+            var worker = await _context.Workers.SingleOrDefaultAsync
+                (w => w.Email == model.Email && w.Password == model.Password);
+            if (worker != null)
+            {
+                return RedirectToAction("Index", "Worker");
+            }           
+            return RedirectToAction("Login","Account");
         }
-
     }
+
 }
+

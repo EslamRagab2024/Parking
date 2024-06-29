@@ -44,15 +44,24 @@ namespace Parking.Controllers
                         {
                             var result = await response.Content.ReadAsStringAsync();
 
-                            // Decode Unicode escape sequences
-                            var decodedResult = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, List<string>>>(result);
-                            String ?license = decodedResult?["detected_licenses"][0];
-                            // check license in Db
+                            // Decode Unicode escape sequences and parse JSON
+                            var decodedResult = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(result);
+                            string ?license = decodedResult?["last_detected_license"];
 
-                            var resultUser = db.Users?.FirstOrDefault(x => x.license == license);
-                            if (resultUser != null) { int x = 5; }
+                  
+                                // Remove the first character from the license
+                                license = license.Substring(1);
 
-                            return RedirectToAction("DisplayResult",resultUser?.ID);
+                                // Find the user by the detected license
+                                var resultUser = await db.Users.SingleOrDefaultAsync(x => x.license == license);
+                                
+                                
+                                    // Redirect to DisplayResult action with the found user
+                                    return RedirectToAction("DisplayResult", resultUser);
+                                
+                                
+                            
+                            
                         }
                         else
                         {
@@ -62,24 +71,24 @@ namespace Parking.Controllers
                 }
             }
 
-            return View();
+            return RedirectToAction("DisplayResult", new User());
         }
 
 
-        public IActionResult DisplayResult(int id)
-        {
-            var resultUser = db.Users?
-            .Include(u => u.Bookings).FirstOrDefault(x => x.ID == id);
 
-            if (resultUser != null)
+        public async Task <IActionResult> DisplayResult(User user)
+        {
+            if(user!=null&& user.Email != null)
             {
-                return View(resultUser);
+                User ?user1 = await db.Users
+                .Include(u => u.Bookings)
+                 .FirstOrDefaultAsync(u=> u.Email==user.Email);
+                return View(user1);
             }
             else
-            {
-                ModelState.AddModelError("wrong detection", "this user not booking");
-                return View();
-            }
+            { return View(user); }
+
+            
             
             
         }

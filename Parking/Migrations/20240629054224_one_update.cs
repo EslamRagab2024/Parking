@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Parking.Migrations
 {
-    public partial class thirdupdate : Migration
+    public partial class one_update : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

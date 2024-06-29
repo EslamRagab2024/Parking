@@ -6,67 +6,72 @@
 }
 
 <h1>DisplayResult</h1>
-
-<div>
-    <h4>User</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Phone)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Phone)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.license)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.license)
-        </dd>
-    </dl>
-</div>
-
-<div>
-    <h4>Bookings</h4>
-    <hr />
-    @if (Model.Bookings != null )
-    {
+@if (Model != null&&Model.Email!=null)
+{
+    <div>
+        <h4>User</h4>
+        <hr />
         <dl class="row">
-            @foreach (var booking in Model.Bookings)
-            {
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => booking.StartTime)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => booking.StartTime)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => booking.EndTime)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => booking.EndTime)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => booking.IsConfirmed)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => booking.IsConfirmed)
-                </dd>
-            }
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Phone)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Phone)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.license)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.license)
+            </dd>
         </dl>
-    }
-    else
-    {
-        <p>No bookings available.</p>
-    }
-</div>
+    </div>
 
+    <div>
+        <h4>Bookings</h4>
+        <hr />
+        @if (Model.Bookings != null)
+        {
+            <dl class="row">
+                @foreach (var booking in Model.Bookings)
+                {
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => booking.StartTime)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => booking.StartTime)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => booking.EndTime)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => booking.EndTime)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => booking.IsConfirmed)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => booking.IsConfirmed)
+                    </dd>
+                }
+            </dl>
+        }
+        else
+        {
+            <p>No bookings available.</p>
+        }
+    </div>
+}
+else
+{
+    <p>no data </p>
+}
 <p>
     @Html.ActionLink("Go to Home", "Index", "Worker")
 </p>

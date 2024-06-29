@@ -12,8 +12,8 @@ using Parking.Models;
 namespace Parking.Migrations
 {
     [DbContext(typeof(MyDb))]
-    [Migration("20240627105325_third-update")]
-    partial class thirdupdate
+    [Migration("20240629054224_one_update")]
+    partial class one_update
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

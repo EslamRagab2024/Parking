@@ -21,7 +21,7 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddDbContext<MyDb>(options =>
 {
-    options.UseSqlServer("Data Source =.; Initial Catalog = parkingdbcore; Integrated Security = True");
+    options.UseSqlServer("Data Source =.; Initial Catalog = parkingdb1; Integrated Security = True");
 });
 builder.Services.AddControllersWithViews();
 
@@ -45,7 +45,7 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
         name: "default",
-        pattern: "{controller=Account}/{action=Register}/{id?}");
+        pattern: "{controller=Account}/{action=Login}/{id?}");
 });
 
 app.Run();
