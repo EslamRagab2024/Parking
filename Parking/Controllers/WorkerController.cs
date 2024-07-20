@@ -1,22 +1,26 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Parking.Models;
-using System.ComponentModel;
 
 namespace Parking.Controllers
 {
+    [Authorize(Roles = "Worker")]
     public class WorkerController : Controller
     {
-        private MyDb db;
-        public WorkerController( MyDb db )
+
+        private readonly MyDb db;
+
+        public WorkerController(MyDb db) 
         {
             this.db = db;
         }
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Upload()
         {
             return View();
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Upload(IFormFile photo)
@@ -46,22 +50,18 @@ namespace Parking.Controllers
 
                             // Decode Unicode escape sequences and parse JSON
                             var decodedResult = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(result);
-                            string ?license = decodedResult?["last_detected_license"];
+                            string? license = decodedResult?["last_detected_license"];
 
-                  
-                                // Remove the first character from the license
-                                license = license.Substring(1);
 
-                                // Find the user by the detected license
-                                var resultUser = await db.Users.SingleOrDefaultAsync(x => x.license == license);
-                                
-                                
-                                    // Redirect to DisplayResult action with the found user
-                                    return RedirectToAction("DisplayResult", resultUser);
-                                
-                                
-                            
-                            
+                            // Remove the first character from the license
+                            license = license.Substring(1);
+
+                            // Find the user by the detected license
+                            var resultUser = await db.Bookings.FirstOrDefaultAsync(x => x.License == license);
+
+
+                            // Redirect to DisplayResult action with the found user
+                            return RedirectToAction("Display",resultUser);
                         }
                         else
                         {
@@ -71,27 +71,13 @@ namespace Parking.Controllers
                 }
             }
 
-            return RedirectToAction("DisplayResult", new User());
+            return RedirectToAction("Display");
         }
 
-
-
-        public async Task <IActionResult> DisplayResult(User user)
+        public IActionResult Display(Booking model) 
         {
-            if(user!=null&& user.Email != null)
-            {
-                User ?user1 = await db.Users
-                .Include(u => u.Bookings)
-                 .FirstOrDefaultAsync(u=> u.Email==user.Email);
-                return View(user1);
-            }
-            else
-            { return View(user); }
-
             
-            
-            
+            return View(model);
         }
-
     }
 }

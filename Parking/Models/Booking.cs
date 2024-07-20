@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Parking.Models
 {
@@ -7,11 +6,11 @@ namespace Parking.Models
     {
         
         public int ID { get; set; }
-
-        [Required(ErrorMessage = "Email is required")]
-        [EmailAddress(ErrorMessage = "Invalid Email Address")]
-        [Key]
+        [Required]
+        [DataType(DataType.EmailAddress)]
         public string? Email { get; set; }
+        [Required]
+        public string ?License { get; set; }
 
         [Required]
         public DateTime StartTime { get; set; }
@@ -19,8 +18,6 @@ namespace Parking.Models
         public DateTime EndTime { get; set; }
 
         public bool IsConfirmed { get; set; }
-        // Foreign key to User
-        [ForeignKey("Email")]
-        public User? User { get; set; }
+        
     }
 }

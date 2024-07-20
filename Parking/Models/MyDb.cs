@@ -1,18 +1,25 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Parking.viewmodels;
+
 
 namespace Parking.Models
 {
-    public class MyDb:DbContext
+    public class MyDb:IdentityDbContext<ApplicationUser>
     {
-        public MyDb(DbContextOptions<MyDb> options) : base(options)
+        public MyDb(DbContextOptions options) : base(options)
         {
 
         }
-        public DbSet<User> ?Users { get; set; }
-        public DbSet<Worker> ?Workers { get; set; }
-        public DbSet<Admin> ?Admins { get; set; }
+        
         public DbSet<Booking> ?Bookings { get; set; }
+        
+        public DbSet<Parking.viewmodels.RegisterUserViewModel>? RegisterUserViewModel { get; set; }
+        
+        public DbSet<Parking.viewmodels.LoginViewModel>? LoginViewModel { get; set; }
+        
+        public DbSet<Parking.viewmodels.Roleview>? Roleview { get; set; }
+       
 
     }
 }

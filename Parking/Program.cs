@@ -21,8 +21,9 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddDbContext<MyDb>(options =>
 {
-    options.UseSqlServer("Data Source =.; Initial Catalog = parkingdb1; Integrated Security = True");
+    options.UseSqlServer("Data Source =.; Initial Catalog = ParkingIdentity; Integrated Security = True");
 });
+builder.Services.AddIdentity<ApplicationUser,IdentityRole>().AddEntityFrameworkStores<MyDb>();
 builder.Services.AddControllersWithViews();
 
 
@@ -38,6 +39,8 @@ if (!app.Environment.IsDevelopment())
 //app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 //app.UseCors("mycors");
 
 
@@ -45,7 +48,7 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
         name: "default",
-        pattern: "{controller=Account}/{action=Login}/{id?}");
+        pattern: "{controller=Account}/{action=Register}/{id?}");
 });
 
 app.Run();

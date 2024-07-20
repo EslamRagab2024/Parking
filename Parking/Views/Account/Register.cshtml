@@ -1,57 +1,48 @@
-﻿@model Parking.Models.User
+﻿@model Parking.viewmodels.RegisterUserViewModel
 
 @{
     ViewData["Title"] = "Register";
-    Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
 <h1>Register</h1>
 
-<h4>User</h4>
+<h4>RegisterUserViewModel</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        @using (Html.BeginForm("Register", "Account", FormMethod.Post))
-        {
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
+        <form asp-action="Register">
+            <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
-                @Html.LabelFor(model => model.Name, new { @class = "control-label" })
-                @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
-
             <div class="form-group">
-                @Html.LabelFor(model => model.Email, new { @class = "control-label" })
-                @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                <label asp-for="UserName" class="control-label"></label>
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
-
             <div class="form-group">
-                @Html.LabelFor(model => model.Password, new { @class = "control-label" })
-                @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
             </div>
-
             <div class="form-group">
-                @Html.LabelFor(model => model.Phone, new { @class = "control-label" })
-                @Html.TextBoxFor(model => model.Phone, new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                <label asp-for="ConfirmPassword" class="control-label"></label>
+                <input asp-for="ConfirmPassword" class="form-control" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.license, new { @class = "control-label" })
-                @Html.TextBoxFor(model => model.license, new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.license, "", new { @class = "text-danger" })
-            </div>
-
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
-        }
+        </form>
     </div>
 </div>
 
 <div>
-    @Html.ActionLink("LogIN", "Login")
+    <a asp-action="Index">Back to List</a>
 </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

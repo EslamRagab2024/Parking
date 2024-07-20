@@ -1,0 +1,46 @@
+﻿@model IEnumerable<Parking.Models.Booking>
+
+@{
+    ViewData["Title"] = "Display";
+}
+
+<h1>Display</h1>
+
+<div>
+    <h4>Bookings</h4>
+    <div>
+        @if (Model == null || !Model.Any())
+        {
+            <h2>No data found</h2>
+        }
+        else
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.License)</th>
+                        <th>@Html.DisplayNameFor(model => model.StartTime)</th>
+                        <th>@Html.DisplayNameFor(model => model.EndTime)</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var booking in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => booking.License)</td>
+                            <td>@Html.DisplayFor(modelItem => booking.StartTime)</td>
+                            <td>@Html.DisplayFor(modelItem => booking.EndTime)</td>
+                            
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+
+<div>
+    
+    <a asp-action="Book">New Book</a>
+</div>
